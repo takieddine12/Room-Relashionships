@@ -4,6 +4,8 @@ import androidx.room.*
 import com.example.roomrelashionships.models.Director
 import com.example.roomrelashionships.models.School
 import com.example.roomrelashionships.models.Students
+import com.example.roomrelashionships.relations.manytomany.StudentsWithSubjectJunction
+import com.example.roomrelashionships.relations.manytomany.Subject
 import com.example.roomrelashionships.relations.onetomany.SchoolWithStudents
 import com.example.roomrelashionships.relations.onetoone.SchoolAndDirector
 
@@ -32,7 +34,19 @@ interface SchoolDirectorDao {
 
     @Transaction
     @Query("SELECT * From students Where schoolName = :schoolName")
-    suspend fun QuerySchoolWithStudents(schoolName : String) : List<SchoolWithStudents>
+    suspend fun querySchoolWithStudents(schoolName : String) : List<SchoolWithStudents>
+
+    // TODO : Many To Mant RelashionShip
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSubject(subject: Subject)
+
+    @Transaction
+    @Query("SELECT * FROM SUBJECT Where studentSubject = :studentSubject")
+    suspend fun queryBySubjectAndStudents(studentSubject : String) : List<StudentsWithSubjectJunction>
+
+
+
 
 
 
